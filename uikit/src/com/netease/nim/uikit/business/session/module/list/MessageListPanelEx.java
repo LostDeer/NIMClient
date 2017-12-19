@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.netease.nim.uikit.R;
@@ -64,6 +65,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 /**
  * 基于RecyclerView的消息收发模块
@@ -159,6 +162,7 @@ public class MessageListPanelEx {
 
     private void initListView(IMMessage anchor) {
         listviewBk = (ImageView) rootView.findViewById(R.id.message_activity_background);
+        TextView tv_lookpatient = (TextView) rootView.findViewById(R.id.tv_lookpatient);
 
         // RecyclerView
         messageListView = (RecyclerView) rootView.findViewById(R.id.messageListView);
@@ -175,6 +179,9 @@ public class MessageListPanelEx {
         });
         messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
+        // ios style
+        OverScrollDecoratorHelper.setUpOverScroll(messageListView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+
         // adapter
         items = new ArrayList<>();
         adapter = new MsgAdapter(messageListView, items, container);
@@ -184,6 +191,12 @@ public class MessageListPanelEx {
         initFetchLoadListener(anchor);
         messageListView.setAdapter(adapter);
         messageListView.addOnItemTouchListener(listener);
+        tv_lookpatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(container.activity, "我是王尼玛", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private OnItemClickListener listener = new OnItemClickListener() {
@@ -794,7 +807,7 @@ public class MessageListPanelEx {
             prepareDialogItems(item, alertDialog);
             alertDialog.show();
         }
-
+        private final long msgTime=2*60*1000;
         // 长按消息item的菜单项准备。如果消息item的MsgViewHolder处理长按事件(MsgViewHolderBase#onItemLongClick),且返回为true，
         // 则对应项的长按事件不会调用到此处
         private void prepareDialogItems(final IMMessage selectedItem, CustomAlertDialog alertDialog) {
@@ -811,19 +824,23 @@ public class MessageListPanelEx {
             // 3 revoke
             if (selectedItem.getDirect() == MsgDirectionEnum.Out && selectedItem.getStatus() == MsgStatusEnum.success
                     && !NimUIKitImpl.getMsgRevokeFilter().shouldIgnore(selectedItem) && !recordOnly) {
-                longClickRevokeMsg(selectedItem, alertDialog);
+                long time = System.currentTimeMillis();
+                if((time-selectedItem.getTime())<=msgTime){
+                    longClickRevokeMsg(selectedItem, alertDialog);
+                }
+
             }
             // 4 delete
             longClickItemDelete(selectedItem, alertDialog);
             // 5 trans
-            longClickItemVoidToText(selectedItem, alertDialog, msgType);
+//            longClickItemVoidToText(selectedItem, alertDialog, msgType);
 
-            if (!NimUIKitImpl.getMsgForwardFilter().shouldIgnore(selectedItem) && !recordOnly) {
+//            if (!NimUIKitImpl.getMsgForwardFilter().shouldIgnore(selectedItem) && !recordOnly) {
                 // 6 forward to person
-                longClickItemForwardToPerson(selectedItem, alertDialog);
+                //                longClickItemForwardToPerson(selectedItem, alertDialog);
                 // 7 forward to team
-                longClickItemForwardToTeam(selectedItem, alertDialog);
-            }
+                //                longClickItemForwardToTeam(selectedItem, alertDialog);
+//            }
         }
 
         // 长按菜单项--重发
@@ -898,7 +915,8 @@ public class MessageListPanelEx {
 
         // 长按菜单项 -- 音频转文字
         private void longClickItemVoidToText(final IMMessage item, CustomAlertDialog alertDialog, MsgTypeEnum msgType) {
-            if (msgType != MsgTypeEnum.audio) return;
+            if (msgType != MsgTypeEnum.audio)
+                return;
 
             if (item.getDirect() == MsgDirectionEnum.In
                     && item.getAttachStatus() != AttachStatusEnum.transferred)
@@ -930,7 +948,8 @@ public class MessageListPanelEx {
 
         // 长按菜单项 -- 听筒扬声器切换
         private void longClickItemEarPhoneMode(CustomAlertDialog alertDialog, MsgTypeEnum msgType) {
-            if (msgType != MsgTypeEnum.audio) return;
+            if (msgType != MsgTypeEnum.audio)
+                return;
 
             String content = UserPreferences.isEarPhoneModeEnable() ? "切换成扬声器播放" : "切换成听筒播放";
             final String finalContent = content;

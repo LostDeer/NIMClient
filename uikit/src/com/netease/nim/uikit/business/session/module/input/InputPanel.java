@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -50,6 +51,11 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.CustomNotificationConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.File;
 import java.util.List;
@@ -617,13 +623,18 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
      */
     private void initAudioRecordButton() {
         audioRecordBtn.setOnTouchListener(new View.OnTouchListener() {
-
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(final View v, final MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    touched = true;
                     initAudioRecord();
-                    onStartAudioRecord();
+                    if(!touched){
+                        touched = true;
+                        if(AndPermission.hasPermission(container.activity,Permission.MICROPHONE)&&AndPermission.hasPermission(container.activity,Permission.STORAGE)){
+                            onStartAudioRecord();
+                        }else {
+                            andPermission();
+                        }
+                    }
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL
                         || event.getAction() == MotionEvent.ACTION_UP) {
                     touched = false;
@@ -632,10 +643,43 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     touched = true;
                     cancelAudioRecord(isCancelled(v, event));
                 }
-
+//                if(AndPermission.hasPermission(container.activity,Permission.MICROPHONE)){
+//                    event(v,event);
+//                }else {
+//                    andPermission(v,event);
+//                }
                 return false;
             }
         });
+    }
+
+    private void andPermission() {
+        AndPermission.with(container.activity)
+                .requestCode(100)
+                .permission(Permission.MICROPHONE,Permission.STORAGE)
+                .rationale(new RationaleListener() {
+                    @Override
+                    public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
+                        // 此对话框可以自定义，调用rationale.resume()就可以继续申请。
+                        AndPermission.rationaleDialog(container.activity, rationale).show();
+                    }
+                })
+                .callback(new PermissionListener() {
+                    @Override
+                    public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
+                        Toast.makeText(container.activity, "可以使用本功能了!", Toast.LENGTH_SHORT).show();
+//                        touched = true;
+//                        initAudioRecord();
+//                        onStartAudioRecord();
+                    }
+
+                    @Override
+                    public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
+                        Toast.makeText(container.activity, "请打开存储和录音权限!", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                })
+                .start();
     }
 
     // 上滑取消录音判断

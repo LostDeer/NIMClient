@@ -9,11 +9,13 @@ import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.mixpush.NIMPushClient;
 import com.netease.nimlib.sdk.util.NIMUtil;
 
 import meng.mengyu.config.NimCache;
 import meng.mengyu.config.NimSDKOptionConfig;
 import meng.mengyu.config.event.DemoOnlineStateContentProvider;
+import meng.mengyu.receiver.PushMessageHandler;
 import meng.mengyu.session.SessionHelper;
 
 /**
@@ -31,6 +33,10 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         NimCache.setContext(this);
+        // 注册小米推送，参数：小米推送证书名称（需要在云信管理后台配置）、appID 、appKey，该逻辑放在 NIMClient init 之前
+        NIMPushClient.registerMiPush(this, "mengyu", "2882303761517683311", "5301768378311");
+
+        NIMPushClient.registerMixPushMessageHandler(new PushMessageHandler());
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         NIMClient.init(this, loginInfo(), NimSDKOptionConfig.getSDKOptions(this));
         // ... your codes
@@ -56,13 +62,14 @@ public class App extends Application {
             // 在线状态定制初始化。
             NimUIKit.setOnlineStateContentProvider(new DemoOnlineStateContentProvider());
             // 2、相关Service调用
+
         }
     }
 
     private UIKitOptions buildUIKitOptions() {
         UIKitOptions options = new UIKitOptions();
         //开启@功能
-        options.aitEnable=true;
+        options.aitEnable=false;
         // 设置app图片/音频/日志等缓存目录
         options.appCacheDir = NimSDKOptionConfig.getAppCacheDir(this) + "/app";
         return options;

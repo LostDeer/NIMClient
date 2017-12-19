@@ -1,13 +1,10 @@
-package meng.mengyu.activitys;
+package meng.mengyu.ui.activitys;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
@@ -55,12 +52,12 @@ public class WelcomeActivity extends BaseActivity {
         @Override
         public void onSuccess(LoginInfo param) {
             NimCache.setAccount(param.getAccount());
-            NimUIKit.getUserInfoProvider().getUserInfoAsync(param.getAccount(), new SimpleCallback() {
-                @Override
-                public void onResult(boolean success, Object result, int code) {
-                    Log.e("WelcomeActivity", result.toString());
-                }
-            });
+//            NimUIKit.getUserInfoProvider().getUserInfoAsync(param.getAccount(), new SimpleCallback() {
+//                @Override
+//                public void onResult(boolean success, Object result, int code) {
+//                    Log.e("WelcomeActivity", result.toString());
+//                }
+//            });
 //            UserInfo userInfo = NimUIKit.getUserInfoProvider().getUserInfo(param.getAccount());
 //            Log.e("WelcomeActivity", userInfo.getAvatar());
             // 初始化消息提醒配置

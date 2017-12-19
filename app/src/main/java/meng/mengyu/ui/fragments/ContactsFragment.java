@@ -1,4 +1,4 @@
-package meng.mengyu.fragments;
+package meng.mengyu.ui.fragments;
 
 import android.os.Bundle;
 
@@ -40,7 +40,6 @@ public class ContactsFragment extends RecentContactsFragment {
 
             @Override
             public void onUnreadCountChange(int unreadCount) {
-
             }
 
             @Override

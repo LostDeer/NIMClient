@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
@@ -13,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.fragment.TFragment;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/11/17.
  */
 
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends UI {
     protected Context mContext;
     private String mClassName;
     @Override

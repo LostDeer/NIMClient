@@ -1,4 +1,4 @@
-package meng.mengyu.adapters;
+package meng.mengyu.ui.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

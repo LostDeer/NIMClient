@@ -1,4 +1,4 @@
-package meng.mengyu.fragments;
+package meng.mengyu.ui.fragments;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,19 +12,21 @@ import meng.mengyu.base.BaseFragment;
  * Github:https://github.com/LostDeer
  */
 
-public class ListFragment extends BaseFragment {
+public class WeCharFragment extends BaseFragment {
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        return inflater.inflate(R.layout.fragment_wechar, container, false);
     }
 
     @Override
     protected void initListener() {
+
     }
 
     @Override
     protected void initData() {
 
     }
+
 }

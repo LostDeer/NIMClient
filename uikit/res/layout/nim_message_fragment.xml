@@ -29,12 +29,28 @@
 
             </FrameLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/messageListView"
-                style="@style/recycler_view"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_lookpatient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="王尼玛 --> 查看病例"
+                    android:background="@color/white"
+                    />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/messageListView"
+                    style="@style/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
         <FrameLayout

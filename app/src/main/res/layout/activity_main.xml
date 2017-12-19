@@ -1,55 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="meng.mengyu.activitys.MainActivity">
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
+    tools:context=".ui.activitys.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/white"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
 
-        <TextView
-            android:id="@+id/tv_wechar"
-            android:layout_width="0dp"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_main"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="微信"
-            android:textColor="@android:color/black"/>
+            android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/tv_Contactperson"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:background="@color/white"
-            android:gravity="center"
-            android:text="联系人"
-            android:textColor="@android:color/black"/>
+            android:orientation="horizontal"
+            >
 
-        <TextView
-            android:id="@+id/tv_me"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="我的"
-            android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/tv_wechar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="微信"
+                android:textColor="@android:color/black"/>
 
+            <TextView
+                android:id="@+id/tv_Contactperson"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="联系人"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/tv_me"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="我的"
+                android:textColor="@android:color/black"/>
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <com.netease.nim.uikit.common.ui.drop.DropCover
+        android:id="@+id/unread_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        />
+</RelativeLayout>

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -78,15 +79,20 @@ public abstract class UI extends AppCompatActivity {
 
     public void setToolBar(int toolBarId, ToolBarOptions options) {
         toolbar = (Toolbar) findViewById(toolBarId);
-        if (options.titleId != 0) {
-            toolbar.setTitle(options.titleId);
-        }
-        if (!TextUtils.isEmpty(options.titleString)) {
-            toolbar.setTitle(options.titleString);
-            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        }
-        if (options.logoId != 0) {
-            toolbar.setLogo(options.logoId);
+        AppCompatTextView tv_title = (AppCompatTextView)toolbar.findViewById(R.id.tv_title);
+        if(tv_title==null){
+            if (options.titleId != 0) {
+                toolbar.setTitle(options.titleId);
+            }
+            if (!TextUtils.isEmpty(options.titleString)) {
+                toolbar.setTitle(options.titleString);
+                toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+            }
+            if (options.logoId != 0) {
+                toolbar.setLogo(options.logoId);
+            }
+        }else {
+            toolbar.setTitle("");
         }
         setSupportActionBar(toolbar);
 
@@ -130,14 +136,26 @@ public abstract class UI extends AppCompatActivity {
     public void setTitle(CharSequence title) {
         super.setTitle(title);
         if (toolbar != null) {
-            toolbar.setTitle(title);
-            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+            AppCompatTextView tv_title = (AppCompatTextView)toolbar.findViewById(R.id.tv_title);
+                if(tv_title!=null){
+                    toolbar.setTitle("");
+                    tv_title.setText(title);
+                }else {
+                    toolbar.setTitle(title);
+                    toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+                }
         }
     }
 
     public void setSubTitle(String subTitle) {
         if (toolbar != null) {
-            toolbar.setSubtitle(subTitle);
+            AppCompatTextView tv_title = (AppCompatTextView)toolbar.findViewById(R.id.tv_title);
+            if(tv_title==null){
+                toolbar.setSubtitle(subTitle);
+            }else {
+                toolbar.setTitle("");
+                toolbar.setSubtitle("");
+            }
         }
     }
 

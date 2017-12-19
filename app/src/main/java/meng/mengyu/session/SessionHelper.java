@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.api.model.contact.ContactEventListener;
 import com.netease.nim.uikit.api.model.recent.RecentCustomization;
 import com.netease.nim.uikit.api.model.session.SessionCustomization;
 import com.netease.nim.uikit.api.model.session.SessionEventListener;
@@ -69,10 +70,38 @@ public class SessionHelper {
         // 注册消息撤回监听器
         registerMsgRevokeObserver();
 
+        //定制联系人列表点击事件
+        registerContactEventListener();
 
+        // 定制化单聊界面。如果使用默认界面，返回null即可
         NimUIKit.setCommonP2PSessionCustomization(getP2pCustomization());
 
+        //最近会话列表,自定义会话显示
         NimUIKit.setRecentCustomization(getRecentCustomization());
+        //设置为听筒模式或者音乐模式==false
+        NimUIKit.setEarPhoneModeEnable(false);
+    }
+
+    private static void registerContactEventListener() {
+        // 在Application初始化中设置
+        NimUIKit.setContactEventListener(new ContactEventListener() {
+            @Override
+            public void onItemClick(Context context, String account) {
+                startP2PSession(context,account);
+            }
+
+            @Override
+            public void onItemLongClick(Context context, String account) {
+                Toast.makeText(context, "我被长按了", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAvatarClick(Context context, String account) {
+                // 进入个人资料页，开发者自行实现
+//                UserProfileActivity.start(context, account);
+                Toast.makeText(context, "点击了头像", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private static RecentCustomization getRecentCustomization() {
@@ -94,7 +123,8 @@ public class SessionHelper {
                 } else if (attachment instanceof RedPacketOpenedAttachment) {
                     return ((RedPacketOpenedAttachment) attachment).getDesc(recent.getSessionType(), recent.getContactId());
                 } else if(attachment instanceof PrescriptionAttachment){
-                    return "[药方]";
+
+                    return "["+((PrescriptionAttachment)attachment).getContent()+"]";
                 }
                 return super.getDefaultDigest(recent);
             }

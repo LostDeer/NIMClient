@@ -10,7 +10,7 @@ import com.netease.nim.uikit.business.contact.core.model.ContactDataAdapter;
 
 public class LabelHolder extends AbsContactViewHolder<LabelItem> {
 
-    private TextView name;
+    private TextView name,test;
 
     @Override
     public void refresh(ContactDataAdapter contactAdapter, int position, LabelItem item) {
