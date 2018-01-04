@@ -10,8 +10,5 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppWelcomeTheme" parent="AppTheme">
-        <item name="toolbarNavigationButtonStyle">@style/myToolbarNavigationButtonStyle</item>
-        <item name="android:windowBackground">@mipmap/ic_launcher_round</item>
-    </style>
+    <style name="AppTheme.Launcher"> <item name="android:windowBackground">@drawable/launch_screen</item> </style>
 </resources>

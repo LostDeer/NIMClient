@@ -31,6 +31,7 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void loadViewLayout() {
+        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_welcome);
     }
 

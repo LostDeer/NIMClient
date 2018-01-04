@@ -67,7 +67,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ui.activitys.WelcomeActivity"
-                  android:theme="@style/AppWelcomeTheme"
+                  android:theme="@style/AppTheme.Launcher"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
