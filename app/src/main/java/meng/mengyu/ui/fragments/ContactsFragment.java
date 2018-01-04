@@ -22,6 +22,7 @@ import meng.mengyu.session.extension.RedPacketAttachment;
 import meng.mengyu.session.extension.RedPacketOpenedAttachment;
 import meng.mengyu.session.extension.SnapChatAttachment;
 import meng.mengyu.session.extension.Sticker.StickerAttachment;
+import meng.mengyu.session.reminder.ReminderManager;
 
 /**
  * Created by ${LostDeer} on 2017/12/15.
@@ -40,6 +41,7 @@ public class ContactsFragment extends RecentContactsFragment {
 
             @Override
             public void onUnreadCountChange(int unreadCount) {
+                ReminderManager.getInstance().updateSessionUnreadNum(unreadCount);
             }
 
             @Override

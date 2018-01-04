@@ -27,10 +27,10 @@ public class PrescriptionAction extends BaseAction {
     @Override
     public void onClick() {
         PrescriptionAttachment prescriptionAttachment = new PrescriptionAttachment();
+        prescriptionAttachment.setTitle("标题");
         prescriptionAttachment.setContent("开方咯 = =!!!");
         IMMessage message = MessageBuilder.createCustomMessage(
-                                getAccount(), getSessionType(), prescriptionAttachment
-                        );
+                                getAccount(), getSessionType(), prescriptionAttachment);
         sendMessage(message);
     }
 }

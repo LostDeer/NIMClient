@@ -15,7 +15,6 @@ import com.netease.nimlib.sdk.util.NIMUtil;
 import meng.mengyu.config.NimCache;
 import meng.mengyu.config.NimSDKOptionConfig;
 import meng.mengyu.config.event.DemoOnlineStateContentProvider;
-import meng.mengyu.receiver.PushMessageHandler;
 import meng.mengyu.session.SessionHelper;
 
 /**
@@ -35,8 +34,7 @@ public class App extends Application {
         NimCache.setContext(this);
         // 注册小米推送，参数：小米推送证书名称（需要在云信管理后台配置）、appID 、appKey，该逻辑放在 NIMClient init 之前
         NIMPushClient.registerMiPush(this, "mengyu", "2882303761517683311", "5301768378311");
-
-        NIMPushClient.registerMixPushMessageHandler(new PushMessageHandler());
+//        NIMPushClient.registerMixPushMessageHandler(new PushMessageHandler());
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         NIMClient.init(this, loginInfo(), NimSDKOptionConfig.getSDKOptions(this));
         // ... your codes
@@ -74,15 +72,15 @@ public class App extends Application {
         options.appCacheDir = NimSDKOptionConfig.getAppCacheDir(this) + "/app";
         return options;
     }
-
+   public static final String account = "LostDeer001";
+    public static final String token = "075c375022cc859132234e6343b82dd4";
     // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
     //掉线重连的时候会用到
     private LoginInfo loginInfo() {
         // 从本地读取上次登录成功时保存的用户登录信息
-//        String account = "lostdeer";
-        String account = "LostDeer001";
-        String token = "075c375022cc859132234e6343b82dd4";
-//        String token = "03dd100696cfe52a3defb8ee661373a2";
+//        String account = "shuji9527";
+//                String token = "317ab24c691d6a5d286f8361297ab41d";
+
         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
             NimCache.setAccount(account.toLowerCase());
             return new LoginInfo(account, token);

@@ -124,7 +124,7 @@ public class SessionHelper {
                     return ((RedPacketOpenedAttachment) attachment).getDesc(recent.getSessionType(), recent.getContactId());
                 } else if(attachment instanceof PrescriptionAttachment){
 
-                    return "["+((PrescriptionAttachment)attachment).getContent()+"]";
+                    return "["+((PrescriptionAttachment)attachment).getTitle()+"]";
                 }
                 return super.getDefaultDigest(recent);
             }

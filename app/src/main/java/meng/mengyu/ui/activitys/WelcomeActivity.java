@@ -10,8 +10,10 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import meng.mengyu.R;
+import meng.mengyu.app.App;
 import meng.mengyu.base.BaseActivity;
 import meng.mengyu.config.NimCache;
 import meng.mengyu.config.event.UserPreferences;
@@ -43,15 +45,16 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void init() {
-        final LoginInfo info = new LoginInfo("LostDeer001","075c375022cc859132234e6343b82dd4");
+        final LoginInfo info = new LoginInfo(App.account,App.token);
         NIMClient.getService(AuthService.class).login(info).setCallback(callback);
-
     }
 
     RequestCallback<LoginInfo> callback = new RequestCallback<LoginInfo>(){
         @Override
         public void onSuccess(LoginInfo param) {
             NimCache.setAccount(param.getAccount());
+            MiPushClient.setAlias(WelcomeActivity.this,App.account,null);
+//            MiPushClient.setUserAccount(WelcomeActivity.this,param.getAccount(),null);
 //            NimUIKit.getUserInfoProvider().getUserInfoAsync(param.getAccount(), new SimpleCallback() {
 //                @Override
 //                public void onResult(boolean success, Object result, int code) {

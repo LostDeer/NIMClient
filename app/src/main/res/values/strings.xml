@@ -4,6 +4,8 @@
     <string name="tip">Tip</string>
     <string name="prescription">药方</string>
 
+    <string name="description">开启一个辅助功能</string>
+
     <!-- 多端在线类型 -->
     <string name="on_line">在线</string>
     <string name="on_line_pc">PC在线</string>

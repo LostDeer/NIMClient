@@ -38,6 +38,11 @@ import com.xiaomi.mipush.sdk.MiPushMessage;
  * 7、DemoMessageReceiver 的 onReceiveRegisterResult 方法用来接收客户端向服务器发送注册命令后的响应结果。<br/>
  * 8、以上这些方法运行在非 UI 线程中。
  *
+ *4.1.  定制通知栏通知的图标
+ 目前通知类的消息， 通知的图标展示规则如下：
+ 如果app中同时存在名为mipush_notification和mipush_small_notification的drawable文件，则使用mipush_notification的drawable作为通知的大图标，mipush_small_notification的drawable作为通知的小图标。
+ 如果app中只存在其中一个drawable文件，则使用该drawable作为通知的图标。
+ 如果app中不存在这两个drawable文件，则使用app的icon作为通知的图标。在MIUI中，通知栏图标统一显示为app的icon，不可以定制。
  */
 
 public class MiPushReceiver extends MiPushMessageReceiver {

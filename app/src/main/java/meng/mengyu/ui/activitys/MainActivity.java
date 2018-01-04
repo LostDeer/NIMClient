@@ -6,10 +6,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.common.ui.drop.DropCover;
+import com.netease.nim.uikit.common.ui.drop.DropFake;
 import com.netease.nim.uikit.common.ui.drop.DropManager;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 
@@ -20,11 +23,15 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import meng.mengyu.R;
 import meng.mengyu.base.BaseActivity;
+import meng.mengyu.session.reminder.ReminderItem;
+import meng.mengyu.session.reminder.ReminderManager;
+import meng.mengyu.session.reminder.ReminderSettings;
+import meng.mengyu.session.reminder.SystemMessageUnreadManager;
 import meng.mengyu.ui.adapters.FragmentAdapter;
+import meng.mengyu.ui.fragments.ContactsFragment;
 import meng.mengyu.ui.fragments.ListFragment;
-import meng.mengyu.ui.fragments.WeCharFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements ReminderManager.UnreadNumChangedCallback {
     @BindView(R.id.vp_main)
     ViewPager mVpMain;
     @BindView(R.id.tv_wechar)
@@ -33,6 +40,8 @@ public class MainActivity extends BaseActivity {
     TextView mTvContactperson;
     @BindView(R.id.tv_me)
     TextView mTvSetting;
+    @BindView(R.id.tab_new_msg_label)
+    DropFake mDropFake;
     private List mFragmentList = new ArrayList<>(3);
     @Override
     protected Context getActivityContext() {
@@ -46,19 +55,69 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-        mFragmentList.add(new WeCharFragment());
+        mFragmentList.add(new ContactsFragment());
         mFragmentList.add(new ListFragment());
-        mFragmentList.add(new ListFragment());
+        mFragmentList.add(new ContactsFragment());
+
         //        mFragmentList.add(conversationListFragment1);
 //        mFragmentList.add(conversationListFragment2);
 //        mFragmentList.add(FragmentFactory.getInstance().getContactsFragment());
+    }
+
+    private void requestSystemMessageUnreadCount() {
+        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
+        SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
+        ReminderManager.getInstance().updateContactUnreadNum(unread);
+    }
+
+    private void registerSystemMessageObservers(boolean register) {
+        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(sysMsgUnreadCountChangedObserver,
+                register);
+    }
+    private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
+        @Override
+        public void onEvent(Integer unreadCount) {
+            SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unreadCount);
+            ReminderManager.getInstance().updateContactUnreadNum(unreadCount);
+        }
+    };
+    /**
+     * 注册未读消息数量观察者
+     */
+    private void registerMsgUnreadInfoObserver(boolean register) {
+        if (register) {
+            ReminderManager.getInstance().registerUnreadNumChangedCallback(this);
+        } else {
+            ReminderManager.getInstance().unregisterUnreadNumChangedCallback(this);
+        }
     }
 
     @Override
     protected void processLogic() {
         mVpMain.setOffscreenPageLimit(2);
         mVpMain.setAdapter(new FragmentAdapter(getSupportFragmentManager(), mFragmentList));
+        registerMsgUnreadInfoObserver(true);
+        registerSystemMessageObservers(true);
+        requestSystemMessageUnreadCount();
         initUnreadCover();
+        mDropFake.setTouchListener(new DropFake.ITouchListener() {
+            @Override
+            public void onDown() {
+                DropManager.getInstance().setCurrentId(String.valueOf(0));
+                DropManager.getInstance().down(mDropFake, mDropFake.getText());
+            }
+
+            @Override
+            public void onMove(float curX, float curY) {
+                DropManager.getInstance().move(curX, curY);
+            }
+
+            @Override
+            public void onUp() {
+                DropManager.getInstance().up();
+            }
+        });
+//        AccessibilityUtil.getInstance().openAccessibility("meng.mengyu.service.NimAccessibilityService",this);
     }
 
     private void initUnreadCover() {
@@ -100,4 +159,14 @@ public class MainActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void onUnreadNumChanged(ReminderItem item) {
+        int unread = item.unread();
+        mDropFake.setVisibility(unread > 0 ? View.VISIBLE : View.GONE);
+        if (unread > 0) {
+            mDropFake.setText(String.valueOf(ReminderSettings.unreadMessageShowRule(unread)));
+        }
+    }
+
 }

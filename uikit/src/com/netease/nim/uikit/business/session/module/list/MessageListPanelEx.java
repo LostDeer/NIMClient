@@ -66,8 +66,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-
 /**
  * 基于RecyclerView的消息收发模块
  * Created by huangjun on 2016/12/27.
@@ -180,7 +178,7 @@ public class MessageListPanelEx {
         messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         // ios style
-        OverScrollDecoratorHelper.setUpOverScroll(messageListView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+//        OverScrollDecoratorHelper.setUpOverScroll(messageListView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
 
         // adapter
         items = new ArrayList<>();
@@ -807,7 +805,7 @@ public class MessageListPanelEx {
             prepareDialogItems(item, alertDialog);
             alertDialog.show();
         }
-        private final long msgTime=2*60*1000;
+        private static final long msgTime=2*60*1000;
         // 长按消息item的菜单项准备。如果消息item的MsgViewHolder处理长按事件(MsgViewHolderBase#onItemLongClick),且返回为true，
         // 则对应项的长按事件不会调用到此处
         private void prepareDialogItems(final IMMessage selectedItem, CustomAlertDialog alertDialog) {
@@ -828,7 +826,6 @@ public class MessageListPanelEx {
                 if((time-selectedItem.getTime())<=msgTime){
                     longClickRevokeMsg(selectedItem, alertDialog);
                 }
-
             }
             // 4 delete
             longClickItemDelete(selectedItem, alertDialog);
